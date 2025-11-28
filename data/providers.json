@@ -1,0 +1,20 @@
+{
+  "electricity": {
+    "Sindh": ["KE", "HESCO", "SEPCO"],
+    "Punjab": ["LESCO", "FESCO", "MEPCO", "IESCO"],
+    "Balochistan": ["QESCO", "BESCO"],
+    "KPK": ["PESCO", "HESCO"]
+  },
+  "water": {
+    "Sindh": ["KWSB"],
+    "Punjab": ["Lahore WASA"],
+    "Balochistan": ["Quetta WASA"],
+    "KPK": ["Peshawar WASA"]
+  },
+  "gas": {
+    "Sindh": ["SSGC"],
+    "Punjab": ["SNGPL"],
+    "Balochistan": ["Balochistan Gas"],
+    "KPK": ["KPK Gas"]
+  }
+}
