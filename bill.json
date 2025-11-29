@@ -1,0 +1,17 @@
+{
+  "electricity": {
+    "lesco": {"ref001": {"name":"Muhammad Ahmed Khan","address":"House #123, Street 45, Gulberg III, Lahore","units":485,"amount":18750}},
+    "iesco": {"ref002": {"name":"Ali Khan","address":"Street 10, Islamabad","units":390,"amount":15200}},
+    "ke": {"ref003": {"name":"Sara Ahmed","address":"Clifton, Karachi","units":520,"amount":20400}}
+  },
+  "gas": {
+    "sngpl": {"gas001": {"name":"Ali Raza","address":"House #45, Street 12, DHA, Lahore","units":150,"amount":6450}},
+    "sgc": {"gas002": {"name":"Zain Malik","address":"Street 9, Karachi","units":170,"amount":7250}},
+    "fpgas": {"gas003": {"name":"Hassan Ali","address":"Faisalabad","units":120,"amount":5800}}
+  },
+  "water": {
+    "lahore": {"wtr001": {"name":"Sara Khan","address":"House #78, Street 9, Johar Town, Lahore","units":45000,"amount":2350}},
+    "islamabad": {"wtr002": {"name":"Ahmed Ali","address":"Street 5, Islamabad","units":38000,"amount":2100}},
+    "karachi": {"wtr003": {"name":"Ali Khan","address":"Karachi","units":50000,"amount":2800}}
+  }
+}
