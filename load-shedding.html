@@ -72,7 +72,7 @@
 </div>
 
 <script>
-// All cities with 40+ Karachi areas
+// All cities + 40+ Karachi areas
 const cities = {
   karachi: ["Nazimabad A Block","Nazimabad B Block","Nazimabad C Block","Nazimabad D Block","North Nazimabad","North Karachi","Gulshan-e-Iqbal","Gulistan-e-Johar","FB Area","Paposh Nagar","Liaquatabad","Lyari","Saddar","Clifton","Defence DHA","Korangi","Landhi","Malir","Shah Faisal Colony","Orangi Town","Surjani Town","Scheme 33","Buffer Zone","Gulshan-e-Maymar","Gadap Town","Keamari","Bin Qasim","PECHS","Tariq Road","Bahadurabad","Akhtar Colony","Delhi Colony","Garden East","Soldier Bazaar","Jamshed Town"],
   lahore: ["Model Town","Gulberg","DHA","Johar Town","Wapda Town","Valencia","Garden Town","Shadman","Iqbal Town","Samanabad","Cantt","Township","Faisal Town"],
@@ -102,18 +102,18 @@ const scheduleData = {
   }
 };
 
-// Populate cities when utility changes
+// Populate cities when utility selected
 document.getElementById("utility").addEventListener("change", () => {
   const citySelect = document.getElementById("city");
   citySelect.innerHTML = '<option value="">Select City</option>';
   Object.keys(cities).forEach(key => {
-    const name = key.charAt(0).toUpperCase() + key.slice(1);  // Fixed: slice(1)
+    const name = key.charAt(0).toUpperCase() + key.slice(1);  // FIXED: was slice1)
     citySelect.innerHTML += `<option value="${key}">${name}</option>`;
   });
   document.getElementById("area").innerHTML = '<option value="">Select Area</option>';
 });
 
-// Populate areas when city changes
+// Populate areas when city selected
 document.getElementById("city").addEventListener("change", () => {
   const areaSelect = document.getElementById("area");
   areaSelect.innerHTML = '<option value="">Select Area</option>';
@@ -124,7 +124,7 @@ document.getElementById("city").addEventListener("change", () => {
   });
 });
 
-// Main function
+// Main function - show result
 function showResult() {
   const utility = document.getElementById("utility").value;
   const city = document.getElementById("city").value;
@@ -145,26 +145,29 @@ function showResult() {
   let currentMsg = "";
   let color = "on";
 
-  // Current Status Logic (Simplified & Fixed)
+  // Current Status
   if (utility === "electricity") {
     const slots = scheduleData.electricity[area] || scheduleData.electricity.default;
-    if (slots.includes("No Load Shedding")) {
+    if (slots[0] && slots[0].includes("No Load")) {
       currentMsg = "Power is ON (No Shedding)";
     } else {
-      currentMsg = (hours >= 6 && hours < 10) || (hours >= 14 && hours < 18) || (hours >= 22 || hours < 6) 
-        ? "Power is ON Right Now" : "Load Shedding Active Now";
-      color = currentMsg.includes("ON") ? "on" : "off";
+      const onTimes = hours >= 22 || hours < 6 || hours >= 6 && hours < 10 || hours >= 14 && hours < 18;
+      currentMsg = onTimes ? "Power is ON Right Now" : "Load Shedding Active Now";
+      color = onTimes ? "on" : "off";
     }
   }
   else if (utility === "gas") {
-    const isFull = (hours < 5) || (hours >= 9 && hours < 12);
-    currentMsg = isFull ? "Gas Full Pressure Now" : "Low Pressure Right Now";
-    color = isFull ? "on" : "low";
+    const full = hours < 5 || (hours >= 9 && hours < 12);
+    currentMsg = full ? "Gas Full Pressure Now" : "Low Pressure Right Now";
+    color = full ? "on" : "low";
   }
   else if (utility === "water") {
-    currentMsg = city === "lahore" 
-      ? ((hours >= 4 && hours < 10) || (hours >= 14 && hours < 18) || (hours >= 20 && hours < 24)) ? "Water Supply ON" : "No Water Supply"
-      : (hours >= 8 && hours < 16) ? "Water Supply ON" : "Low / No Water";
+    if (city === "lahore") {
+      const on = (hours >= 4 && hours < 10) || (hours >= 14 && hours < 18) || hours >= 20;
+      currentMsg = on ? "Water Supply ON Now" : "No Water Supply";
+    } else {
+      currentMsg = (hours >= 8 && hours < 16) ? "Water Supply ON Now" : "Low / No Water";
+    }
     color = currentMsg.includes("ON") ? "on" : "low";
   }
 
@@ -195,14 +198,16 @@ function showResult() {
   window.scrollTo(0, document.getElementById("result").offsetTop - 100);
 }
 
-// Submit
+// Submit form
 document.getElementById("form").onsubmit = function(e) {
   e.preventDefault();
   showResult();
-  setInterval(() => {
-    document.getElementById("currentTime").textContent = "Updated: " + new Date().toLocaleTimeString();
-  }, 60000);
 };
+
+// Auto-update time every minute
+setInterval(() => {
+  document.getElementById("currentTime").textContent = "Updated: " + new Date().toLocaleTimeString();
+}, 60000);
 </script>
 </body>
 </html>
