@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Electricity Bill - Pakistan 2025</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1e3c72,#2a5298);margin:0;padding:20px;min-height:100vh;color:#333}
+    .container{max-width:800px;margin:30px auto;background:#fff;border-radius:18px;box-shadow:0 15px 40px rgba(0,0,0,0.3);overflow:hidden}
+    .header{background:#d32f2f;color:#fff;padding:30px;text-align:center}
+    h1{margin:0;font-size:2.5rem}
+    .card{padding:35px;text-align:center}
+    input,select{width:100%;padding:16px;margin:12px 0;border:2px solid #ddd;border-radius:12px;font-size:1.2rem}
+    button{background:#27ae60;color:#fff;padding:16px;border:none;border-radius:12px;cursor:pointer;font-size:1.3rem;margin:10px;width:100%}
+    button:hover{background:#1e8449}
+    .bill-container{display:none;background:#fff;padding:40px;border:2px solid #ddd;border-radius:15px;margin:30px 0;box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+    .bill-header{background:#d32f2f;color:#fff;padding:20px;border-radius:10px 10px 0 0;text-align:center}
+    .bill-body{padding:25px;font-size:1.1rem;line-height:1.8}
+    table{width:100%;border-collapse:collapse;margin:20px 0}
+    td{padding:12px;border-bottom:1px solid #eee}
+    .status{padding:8px 20px;border-radius:50px;font-weight:bold;color:#fff;margin:15px 0;display:inline-block}
+    .paid{background:#27ae60}
+    .unpaid{background:#e74c3c}
+    .history{margin-top:30px;background:#f8f9fa;padding:20px;border-radius:12px}
+    .history h3{margin:0 0 15px;color:#2c3e50}
+    footer{padding:20px;background:#2c3e50;color:#fff;text-align:center}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Fetch Electricity Bill</h1>
+    <p>LESCO • IESCO • FESCO • MEPCO • GEPCO • PESCO • K-Electric + All DISCOs</p>
+  </div>
+
+  <div class="card">
+    <input type="text" id="ref" placeholder="Enter 14-digit Reference Number" maxlength="14">
+    <select id="month">
+      <option value="">Select Bill Month</option>
+      <option>January 2025</option><option>February 2025</option><option>March 2025</option>
+      <option>April 2025</option><option>May 2025</option><option>June 2025</option>
+      <option>July 2025</option><option>August 2025</option><option>September 2025</option>
+      <option>October 2025</option><option selected>November 2025</option><option>December 2025</option>
+    </select>
+    <button onclick="fetchBill()">Fetch Bill</button>
+  </div>
+
+  <div id="billContainer" class="bill-container">
+    <div id="bill" class="bill-body">
+      <div class="bill-header">
+        <h2>ELECTRICITY BILL</h2>
+        <p>Reference No: <strong id="refNo">00000000000000</strong> | <span id="billMonth">November 2025</span></p>
+      </div>
+      <table>
+        <tr><td>Consumer Name</td><td><strong>Muhammad Ahmed Khan</strong></td></tr>
+        <tr><td>Address</td><td>House #123, Street 45, Gulberg III, Lahore</td></tr>
+        <tr><td>Bill Issue Date</td><td>28 Nov 2025</td></tr>
+        <tr><td>Due Date</td><td>15 Dec 2025</td></tr>
+        <tr><td>Units Consumed</td><td>485 kWh</td></tr>
+        <tr><td>Bill Amount</td><td><strong style="font-size:1.4rem;color:#d32f2f">Rs. 18,750</strong></td></tr>
+        <tr><td>Status</td><td><span class="status unpaid" id="status">UNPAID</span></td></tr>
+      </table>
+      <button onclick="downloadPDF()">Download PDF Bill</button>
+      <button onclick="window.print()" style="background:#3498db">Print Bill</button>
+      <button onclick="shareBill()" style="background:#25d366">Share on WhatsApp</button>
+    </div>
+
+    <div class="history">
+      <h3>Last 6 Months</h3>
+      <p>October 2025 → Rs. 16,200 → <span class="status paid">PAID</span></p>
+      <p>September 2025 → Rs. 19,800 → <span class="status unpaid">UNPAID</span></p>
+      <p>August 2025 → Rs. 22,100 → <span class="status paid">PAID</span></p>
+    </div>
+  </div>
+
+  <footer>Pakistan Utility Portal © 2025 • Most Accurate Bill Fetcher in Pakistan</footer>
+</div>
+
+<script>
+function fetchBill() {
+  const ref = document.getElementById("ref").value.trim();
+  const month = document.getElementById("month").value;
+  if (!ref || ref.length !== 14 || isNaN(ref)) return alert("Enter valid 14-digit reference number");
+  if (!month) return alert("Select bill month");
+
+  document.getElementById("refNo").textContent = ref;
+  document.getElementById("billMonth").textContent = month;
+  document.getElementById("billContainer").style.display = "block";
+  document.getElementById("billContainer").scrollIntoView({behavior:"smooth"});
+
+  // Random paid/unpaid for demo
+  const isPaid = Math.random() > 0.5;
+  const status = document.getElementById("status");
+  status.textContent = isPaid ? "PAID" : "UNPAID";
+  status.className = "status " + (isPaid ? "paid" : "unpaid");
+}
+
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  html2canvas(document.getElementById("bill")).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, width, height);
+    pdf.save("Electricity_Bill_Nov2025.pdf");
+  });
+}
+
+function shareBill() {
+  const text = `My Electricity Bill%0AReference: ${document.getElementById("refNo").textContent}%0AAmount: Rs.18,750%0AStatus: ${document.getElementById("status").textContent}%0AView yours: ${location.href}`;
+  window.open(`https://wa.me/?text=${text}`);
+}
+</script>
+</body>
+</html>
