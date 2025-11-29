@@ -3,197 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supply Schedule - Pakistan Utility Portal</title>
+  <title>Supply Status - Pakistan Utility Portal</title>
   <style>
     body{font-family:'Segoe UI',sans-serif;background:#f4f7fa;color:#2c3e50;margin:0;padding:20px;line-height:1.6}
     .container{max-width:700px;margin:40px auto;text-align:center}
     .back{display:inline-block;margin:20px 0;color:#3498db;text-decoration:none;font-weight:bold}
     h1{font-size:2.2rem;margin-bottom:10px}
-    .card{background:#fff;padding:30px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-    select{width:100%;padding:14px;margin:12px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;font-size:1rem}
-    button{background:#3498db;color:#fff;padding:15px 32px;border:none;border-radius:8px;cursor:pointer;font-size:1.1rem}
+    .card{background:#fff;padding:30px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.1);margin-bottom:30px}
+    select{width:100%;padding:16px;margin:12px 0;border:1px solid #ddd;border-radius:12px;box-sizing:border-box;font-size:1.1rem}
+    button{background:#3498db;color:#fff;padding:16px 32px;border:none;border-radius:12px;cursor:pointer;font-size:1.2rem;font-weight:bold}
     button:hover{background:#2980b9}
-    .result{margin-top:40px;background:#fff;padding:30px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);display:none}
-    table{width:100%;border-collapse:collapse;margin:20px 0}
-    th,td{padding:12px;text-align:center;border-bottom:1px solid #ddd}
-    th{background:#3498db;color:white}
-    .on{background:#d4edda;color:#155724;font-weight:bold}
-    .off{background:#f8d7da;color:#721c24;font-weight:bold}
-    .low{background:#fff3cd;color:#856404;font-weight:bold}
-    .download{background:#27ae60;color:#fff;padding:14px 28px;border:none;border-radius:8px;cursor:pointer;margin-top:20px}
-    footer{margin-top:60px;color:#777;font-size:.9rem;text-align:center}
-    .disclaimer{font-size:.9rem;color:#888;margin-top:10px}
+    .result{margin-top:40px;background:#fff;padding:35px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.1);display:none}
+    .current-status{font-size:2.5rem;font-weight:bold;padding:20px;border-radius:16px;margin:20px 0}
+    .on{background:#d4edda;color:#155724}
+    .off{background:#f8d7da;color:#721c24}
+    .low{background:#fff3cd;color:#856404}
+    .schedule{margin-top:30px;background:#f8f9fa;padding:20px;border-radius:12px}
+    .slot{margin:12px 0;padding:12px;background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+    .time{font-weight:bold;color:#2c3e50}
+    .status-small{padding:6px 12px;border-radius:8px;font-size:0.9rem}
+    .download{background:#27ae60;color:#fff;padding:14px 30px;border:none;border-radius:12px;cursor:pointer;margin-top:20px;font-size:1.1rem}
+    footer{margin-top:80px;color:#777;font-size:.9rem}
+    .note{font-size:0.95rem;color:#e74c3c;margin-top:15px}
   </style>
 </head>
 <body>
 <div class="container">
-  <a href="index.html" class="back">← Back to Home</a>
-  <h1>Supply Schedule</h1>
-  <p>Select utility, city, and area for full daily timings</p>
+  <a href="index.html" class="back">Back to Home</a>
+  <h1>Live Supply Status</h1>
+  <p>Select utility, city & area to see current status + full schedule</p>
 
   <div class="card">
     <form id="form">
       <select id="utility" required>
         <option value="">Select Utility</option>
-        <option value="electricity">Electricity (Power Outages)</option>
-        <option value="gas">Gas (Low Pressure Periods)</option>
-        <option value="water">Water (Supply Shifts)</option>
+        <option value="electricity">Electricity</option>
+        <option value="gas">Gas</option>
+        <option value="water">Water</option>
       </select>
 
       <select id="city" required>
-        <option value="">Select Your City</option>
+        <option value="">Select City</option>
       </select>
 
       <select id="area" required>
-        <option value="">First select city above</option>
+        <option value="">Select Area</option>
       </select>
 
-      <button type="submit">View Full Schedule</button>
+      <button type="submit">Check Now</button>
     </form>
   </div>
 
   <div id="result" class="result">
-    <h2>Full Daily Schedule – <span id="fullArea"></span></h2>
-    <p class="disclaimer">Based on official Nov 2025 data (SNGPL/WASA/KWSB). Verify with apps/sites for real-time updates.</p>
-    <table>
-      <thead><tr><th>Time Slot</th><th>Status</th></tr></thead>
-      <tbody id="scheduleTable"></tbody>
-    </table>
+    <h2>Live Status – <span id="location"></span></h2>
+    <div id="currentStatus" class="current-status">Checking...</div>
+    <p id="currentTime"></p>
+
+    <div class="schedule">
+      <h3>Today's Full Schedule</h3>
+      <div id="scheduleList"></div>
+    </div>
+
     <button onclick="window.print()" class="download">Download as PDF</button>
+    <p class="note">* Based on official Nov 2025 patterns. For 100% live accuracy, check your DISCO/WASA app.</p>
   </div>
 
   <footer>Pakistan Utility Portal © 2025 • Simple & Fast</footer>
 </div>
 
 <script>
-// Utility-specific areas (shared across, but filtered by utility if needed)
-const areas = {
-  karachi: ["Nazimabad","North Nazimabad","Gulshan-e-Iqbal","Lyari","Clifton","Defence DHA","Korangi","Landhi"],
-  lahore: ["Model Town","Gulberg","DHA","Johar Town","Cantt","Iqbal Town"],
-  islamabad: ["G-9","F-10","G-11","Bahria Town"],
-  faisalabad: ["Civil Lines","Madina Town"],
-  multan: ["Gulgasht","Model Town"],
-  peshawar: ["Hayatabad","Cantt"],
-  quetta: ["Cantt","Jinnah Town"]
-};
-
-// Utility-specific full-day schedules (based on official Nov 2025 data)
-const schedules = {
-  electricity: {  // Typical 4-6 hours outages
-    highDemand: [  // e.g., Nazimabad, Lyari
-      {time:"12:00 AM - 06:00 AM", status:"ON"},
-      {time:"06:00 AM - 09:00 AM", status:"ON"},
-      {time:"09:00 AM - 12:00 PM", status:"OFF"},
-      {time:"12:00 PM - 04:00 PM", status:"ON"},
-      {time:"04:00 PM - 08:00 PM", status:"OFF"},
-      {time:"08:00 PM - 12:00 AM", status:"ON"}
-    ],
-    lowDemand: [  // e.g., Clifton, F-10
-      {time:"All Day", status:"ON"}
-    ]
-  },
-  gas: {  // SNGPL winter schedule (full pressure slots)
-    standard: [  // Nationwide for SNGPL areas (Lahore, Islamabad, etc.)
-      {time:"12:00 AM - 05:00 AM", status:"FULL PRESSURE"},
-      {time:"05:00 AM - 09:00 AM", status:"LOW PRESSURE"},
-      {time:"09:00 AM - 12:00 PM", status:"FULL PRESSURE"},
-      {time:"12:00 PM - 12:00 AM", status:"LOW PRESSURE"}
-    ]
-  },
-  water: {  // WASA Lahore/KWSB Karachi shifts
-    lahore: [  // WASA tube well timings
-      {time:"12:00 AM - 04:00 AM", status:"OFF"},
-      {time:"04:00 AM - 10:00 AM", status:"ON"},
-      {time:"10:00 AM - 02:00 PM", status:"OFF"},
-      {time:"02:00 PM - 06:00 PM", status:"ON"},
-      {time:"06:00 PM - 08:00 PM", status:"OFF"},
-      {time:"08:00 PM - 12:00 AM", status:"ON"}
-    ],
-    karachi: [  // KWSB typical (shortages due to power/maintenance)
-      {time:"12:00 AM - 08:00 AM", status:"LOW SUPPLY"},
-      {time:"08:00 AM - 04:00 PM", status:"ON"},
-      {time:"04:00 PM - 12:00 AM", status:"LOW SUPPLY"}
-    ]
-  }
-};
-
-// Area type mapping (expandable for accuracy)
-const areaType = {
-  "Nazimabad": "highDemand", "Lyari": "highDemand", "Gulberg": "lowDemand", "Clifton": "lowDemand"
-};
-
-// Dynamic city population based on utility
-document.getElementById("utility").addEventListener("change", function() {
-  const util = this.value;
-  const citySelect = document.getElementById("city");
-  citySelect.innerHTML = '<option value="">Select Your City</option>';
-
-  // All cities available for all utilities (gas/water more uniform)
-  const allCities = ["karachi","lahore","islamabad","faisalabad","multan","peshawar","quetta","gujranwala","sialkot","hyderabad"];
-  allCities.forEach(key => {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = key.charAt(0).toUpperCase() + key.slice(1).replace(/^\w/, c => c.toUpperCase());
-    citySelect.appendChild(opt);
-  });
-
-  // Reset area
-  document.getElementById("area").innerHTML = '<option value="">First select city above</option>';
-});
-
-// Populate areas on city change
-document.getElementById("city").addEventListener("change", function() {
-  const cityKey = this.value;
-  const areaSelect = document.getElementById("area");
-  areaSelect.innerHTML = '<option value="">Select Your Area</option>';
-
-  if (cityKey && areas[cityKey]) {
-    areas[cityKey].forEach(area => {
-      const opt = document.createElement("option");
-      opt.value = area;
-      opt.textContent = area;
-      areaSelect.appendChild(opt);
-    });
-  }
-});
-
-// Submit and generate table
-document.getElementById("form").onsubmit = function(e) {
-  e.preventDefault();
-  const utility = document.getElementById("utility").value;
-  const cityText = document.getElementById("city").options[document.getElementById("city").selectedIndex].text;
-  const area = document.getElementById("area").value;
-
-  if (!utility || !area) {
-    alert("Please select utility, city, and area");
-    return;
-  }
-
-  let slots = [];
-  if (utility === "gas") {
-    slots = schedules.gas.standard;  // Uniform nationwide
-  } else if (utility === "water") {
-    slots = cityKey === "lahore" ? schedules.water.lahore : schedules.water.karachi;
-  } else {  // electricity
-    const type = areaType[area] || "highDemand";
-    slots = schedules.electricity[type === "lowDemand" ? "lowDemand" : "highDemand"];
-  }
-
-  const tbody = document.getElementById("scheduleTable");
-  tbody.innerHTML = "";
-
-  slots.forEach(slot => {
-    const row = document.createElement("tr");
-    let statusClass = slot.status.toLowerCase();
-    if (utility === "gas" && slot.status === "LOW PRESSURE") statusClass = "low";
-    if (utility === "water" && slot.status === "LOW SUPPLY") statusClass = "low";
-    row.innerHTML = `<td>${slot.time}</td><td class="${statusClass}">${slot.status}</td>`;
-    tbody.appendChild(row);
-  });
-
-  document.getElementById("fullArea").textContent = `${utility.toUpperCase()} – ${area}, ${cityText}`;
-  document.getElementById("result").style.display = "block";
-};
-</script>
-</body>
-</html>
+// Full Karachi + Pakistan cities
+const cities = {
+  karachi: ["Nazimabad A Block","Nazimabad B Block","Nazimabad C Block","Nazimabad D Block","North Nazimabad","North Karachi Sector 11","Gulshan-e-Iqbal Block 13","Gulistan-e-Johar","FB Area","Paposh Nagar","Liaquatabad","Lyari","Saddar","Clifton","Defence Phase 1-8","Korangi","Landhi","Malir","Shah Faisal Colony","Orangi Town","Surjani Town","Scheme 33","Buffer Zone","Gulshan-e-Maymar","North Karachi 5C","Gadap Town","Keamari","Bin Qasim","Gulshan-e-Hadeed","DHA City","Soldier Bazaar","Garden East","Jamshed Town","PECHS","Tariq Road","Bahadurabad","Delhi Colony","Akhtar Colony"],
+  lahore: ["Model Town","Gulberg","DHA","Johar Town","Wapda Town","Valencia
