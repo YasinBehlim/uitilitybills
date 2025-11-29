@@ -1,66 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Load Shedding - Pakistan Utility Portal</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Load Shedding Schedule - Pakistan Utility Portal</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7fa; color: #2c3e50; margin: 0; padding: 20px; line-height: 1.6; }
+    .container { max-width: 700px; margin: 40px auto; text-align: center; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #3498db; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+    h1 { font-size: 2.2rem; color: #2c3e50; margin-bottom: 10px; }
+    p { color: #555; margin-bottom: 30px; }
+    .form-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .form-group { margin-bottom: 18px; text-align: left; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; color: #2c3e50; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+    button { background: #3498db; color: white; padding: 14px 30px; border: none; border-radius 8px; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #2980b9; }
+    .result { margin-top: 40px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
+    th { background: #3498db; color: white; }
+    .off { background: #fff3cd; color: #856404; font-weight: bold; }
+    .download-btn { background: #27ae60; margin-top: 20px; padding: 12px 25px; }
+    .download-btn:hover { background: #219653; }
+    footer { margin-top: 60px; color: #777; font-size: 0.9rem; }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Pakistan Utility Portal</h1>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="generate-bill.html">Fetch Bill</a>
-        <a href="load-shedding.html" class="active">Load Shedding</a>
-        <a href="#">Bill Payment</a>
-        <a href="#">Help</a>
-    </nav>
-</header>
+  <div class="container">
+    <a href="index.html" class="back-link">Back to Home</a>
+    <h1>Load Shedding Schedule</h1>
+    <p>Check today’s power outage schedule for your area</p>
 
-<section class="container">
-
-    <div class="card">
-        <h2>Check Load Shedding / Outage</h2>
-        <form id="loadSheddingForm">
-            <label for="lsUtility">Utility:</label>
-            <select id="lsUtility" required>
-                <option value="">Select Utility</option>
-                <option value="electricity">Electricity</option>
-                <option value="water">Water</option>
-                <option value="gas">Gas</option>
-            </select>
-
-            <label for="lsProvince">Province:</label>
-            <select id="lsProvince" required></select>
-
-            <label for="lsProvider">Provider:</label>
-            <select id="lsProvider" required></select>
-
-            <label for="lsArea">Area / City:</label>
-            <input list="areas" id="lsArea" placeholder="Enter your area" required>
-            <datalist id="areas">
-                <option value="Karachi South">
-                <option value="Karachi East">
-                <option value="Karachi West">
-                <option value="Lahore">
-                <option value="Islamabad">
-                <option value="Faisalabad">
-                <option value="Hyderabad">
-                <option value="Sukkur">
-                <option value="Peshawar">
-                <option value="Quetta">
-                <!-- Add more areas as needed -->
-            </datalist>
-
-            <button type="button" id="checkLS">Check Load Shedding</button>
-        </form>
+    <div class="form-card">
+      <form id="loadSheddingForm">
+        <div class="form-group">
+          <label for="lsArea">Enter Your City / Area</label>
+          <input type="text" id="lsArea" list="areas" placeholder="e.g., Lahore, Karachi East, Islamabad" required />
+          <datalist id="areas">
+            <option value="Karachi South">
+            <option value="Karachi East">
+            <option value="Karachi West">
+            <option value="Lahore">
+            <option value="Islamabad">
+            <option value="Faisalabad">
+            <option value="Rawalpindi">
+            <option value="Gujranwala">
+            <option value="Peshawar">
+            <option value="Quetta">
+          </datalist>
+        </div>
+        <button type="submit">Check Schedule</button>
+      </form>
     </div>
 
-    <div id="lsResult"></div>
+    <div id="lsResult" class="result">
+      <h2>Today's Load Shedding Schedule</h2>
+      <p><strong>Area:</strong> <span id="resultArea"></span> | <strong>Date:</strong> <span id="todayDate"></span></p>
 
-</section>
+      <table>
+        <tr><th>Time</th><th>Status</th></tr>
+        <tr><td>06:00 AM – 09:00 AM</td><td>Power ON</td></tr>
+        <tr><td>09:00 AM – 12:00 PM</td><td class="off">Load Shedding (OFF)</td></tr>
+        <tr><td>12:00 PM – 04:00 PM</td><td>Power ON</td></tr>
+        <tr><td>04:00 PM – 08:00 PM</td><td class="off">Load Shedding (OFF)</td></tr>
+        <tr><td>08:00 PM – 06:00 AM</td><td>Power ON</td></tr>
+      </table>
 
-<script src="assets/js/main.js"></script>
+      <button onclick="downloadPDF()" class="download-btn">Download as PDF</button>
+    </div>
+
+    <footer>Pakistan Utility Portal © 2025 • Simple & Fast</footer>
+  </div>
+
+  <script>
+    document.getElementById("loadSheddingForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const area = document.getElementById("lsArea").value.trim();
+      if (!area) return;
+
+      document.getElementById("resultArea").textContent = area;
+      document.getElementById("todayDate").textContent = new Date().toLocaleDateString('en-GB');
+
+      document.getElementById("lsResult").style.display = "block";
+      window.scrollTo(0, document.getElementById("lsResult").offsetTop - 100);
+    });
+
+    function downloadPDF() {
+      window.print(); // Works perfectly as "Save as PDF" in all browsers
+    }
+  </script>
+
 </body>
 </html>
