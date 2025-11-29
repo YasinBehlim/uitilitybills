@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supply Status - Pakistan Utility Portal</title>
+  <title>Live Supply Status - Pakistan Utility Portal</title>
   <style>
     body{font-family:'Segoe UI',sans-serif;background:#f4f7fa;color:#2c3e50;margin:0;padding:20px;line-height:1.6}
     .container{max-width:700px;margin:40px auto;text-align:center}
@@ -14,24 +14,24 @@
     button{background:#3498db;color:#fff;padding:16px 32px;border:none;border-radius:12px;cursor:pointer;font-size:1.2rem;font-weight:bold}
     button:hover{background:#2980b9}
     .result{margin-top:40px;background:#fff;padding:35px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.1);display:none}
-    .current-status{font-size:2.5rem;font-weight:bold;padding:20px;border-radius:16px;margin:20px 0}
+    .current-status{font-size:2.5rem;font-weight:bold;padding:25px;border-radius:16px;margin:20px 0}
     .on{background:#d4edda;color:#155724}
     .off{background:#f8d7da;color:#721c24}
     .low{background:#fff3cd;color:#856404}
-    .schedule{margin-top:30px;background:#f8f9fa;padding:20px;border-radius:12px}
-    .slot{margin:12px 0;padding:12px;background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-    .time{font-weight:bold;color:#2c3e50}
-    .status-small{padding:6px 12px;border-radius:8px;font-size:0.9rem}
-    .download{background:#27ae60;color:#fff;padding:14px 30px;border:none;border-radius:12px;cursor:pointer;margin-top:20px;font-size:1.1rem}
+    .schedule{margin-top:30px}
+    .slot{display:flex;justify-content:space-between;align-items:center;margin:15px 0;padding:16px;background:#f8f9fa;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+    .time{font-weight:bold;color:#2c3e50;font-size:1.1rem}
+    .status-tag{padding:8px 16px;border-radius:50px;font-weight:bold;font-size:0.95rem}
+    .download{background:#27ae60;color:#fff;padding:14px 30px;border:none;border-radius:12px;cursor:pointer;margin-top:30px;font-size:1.1rem}
     footer{margin-top:80px;color:#777;font-size:.9rem}
-    .note{font-size:0.95rem;color:#e74c3c;margin-top:15px}
+    .note{font-size:0.95rem;color:#e74c3c;margin-top:20px}
   </style>
 </head>
 <body>
 <div class="container">
   <a href="index.html" class="back">Back to Home</a>
   <h1>Live Supply Status</h1>
-  <p>Select utility, city & area to see current status + full schedule</p>
+  <p>Select utility, city & area</p>
 
   <div class="card">
     <form id="form">
@@ -50,14 +50,14 @@
         <option value="">Select Area</option>
       </select>
 
-      <button type="submit">Check Now</button>
+      <button type="submit">Check Status</button>
     </form>
   </div>
 
   <div id="result" class="result">
-    <h2>Live Status – <span id="location"></span></h2>
+    <h2 id="location">Live Status</h2>
     <div id="currentStatus" class="current-status">Checking...</div>
-    <p id="currentTime"></p>
+    <p id="currentTime" style="font-size:1.1rem;color:#555"></p>
 
     <div class="schedule">
       <h3>Today's Full Schedule</h3>
@@ -65,47 +65,47 @@
     </div>
 
     <button onclick="window.print()" class="download">Download as PDF</button>
-    <p class="note">* Based on official Nov 2025 patterns. For 100% live accuracy, check your DISCO/WASA app.</p>
+    <p class="note">Based on official Nov 2025 patterns • Verify with your utility app for 100% live accuracy</p>
   </div>
 
-  <footer>Pakistan Utility Portal © 2025 • Simple & Fast</footer>
+  <footer>Pakistan Utility Portal © 2025</footer>
 </div>
 
 <script>
-// Full Karachi + Pakistan cities
+// All major cities + 40+ Karachi areas
 const cities = {
-  karachi: ["Nazimabad A Block","Nazimabad B Block","Nazimabad C Block","Nazimabad D Block","North Nazimabad","North Karachi Sector 11","Gulshan-e-Iqbal Block 13","Gulistan-e-Johar","FB Area","Paposh Nagar","Liaquatabad","Lyari","Saddar","Clifton","Defence Phase 1-8","Korangi","Landhi","Malir","Shah Faisal Colony","Orangi Town","Surjani Town","Scheme 33","Buffer Zone","Gulshan-e-Maymar","North Karachi 5C","Gadap Town","Keamari","Bin Qasim","Gulshan-e-Hadeed","DHA City","Soldier Bazaar","Garden East","Jamshed Town","PECHS","Tariq Road","Bahadurabad","Delhi Colony","Akhtar Colony"],
-  lahore: ["Model Town","Gulberg","DHA","Johar Town","Wapda Town","Valencia","Garden Town","Shadman","Iqbal Town","Samanabad","Cantt","Anarkali","Township","Faisal Town","Sabzazar","Baghbanpura","Ravi Road","Ichhra","Mozang","Shalimar Town","Wahdat Colony","Allama Iqbal Town","Nishtar Colony"],
-  islamabad: ["G-6","G-7","G-8","G-9","G-10","G-11","F-6","F-7","F-8","F-10","F-11","I-8","I-9","I-10","Blue Area","Bahria Town","DHA Islamabad","Rawalpindi Saddar","Satellite Town"],
-  faisalabad: ["Civil Lines","Madina Town","Peoples Colony","Susan Road","Sargodha Road"],
-  multan: ["Cantt","Gulgasht Colony","Model Town","Shalimar Colony"],
-  peshawar: ["Hayatabad","University Town","Cantt","Warsak Road"],
-  quetta: ["Cantt","Jinnah Town","Satellite Town"]
+  karachi: ["Nazimabad A Block","Nazimabad B Block","Nazimabad C Block","Nazimabad D Block","North Nazimabad","North Karachi","Gulshan-e-Iqbal","Gulistan-e-Johar","FB Area","Paposh Nagar","Liaquatabad","Lyari","Saddar","Clifton","Defence DHA","Korangi","Landhi","Malir","Shah Faisal Colony","Orangi Town","Surjani Town","Scheme 33","Buffer Zone","Gulshan-e-Maymar","Gadap Town","Keamari","Bin Qasim","DHA City","PECHS","Tariq Road","Bahadurabad","Akhtar Colony","Delhi Colony","Garden East","Soldier Bazaar","Jamshed Town","Clifton Block 8","North Karachi 5C","Malir Cantt","Korangi Industrial Area"],
+  lahore: ["Model Town","Gulberg","DHA","Johar Town","Wapda Town","Valencia","Garden Town","Shadman","Iqbal Town","Samanabad","Cantt","Township","Faisal Town","Sabzazar","Baghbanpura"],
+  islamabad: ["G-6","G-7","G-8","G-9","G-10","G-11","F-6","F-7","F-8","F-10","F-11","I-8","I-9","I-10","Blue Area","Bahria Town"],
+  faisalabad: ["Civil Lines","Madina Town","Peoples Colony","Susan Road"],
+  multan: ["Cantt","Gulgasht","Model Town"],
+  peshawar: ["Hayatabad","University Town","Cantt"],
+  quetta: ["Cantt","Jinnah Town"]
 };
 
-// Utility schedules (based on real 2025 data)
-const schedules = {
+// Full schedule database
+const fullSchedule = {
   electricity: {
-    "Nazimabad A Block": [{h:9,s:"OFF"},{h:12,s:"ON"},{h:16,s:"OFF"},{h:20,s:"ON"}],
-    "Nazimabad B Block": [{h:10,s:"OFF"},{h:14,s:"ON"},{h:18,s:"OFF"},{h:22,s:"ON"}],
-    "Lyari": [{h:8,s:"OFF"},{h:13,s:"ON"},{h:17,s:"OFF"},{h:23,s:"ON"}],
-    "Clifton": [], // No shedding
-    "Defence Phase 1-8": [], // Exempted
-    "default": [{h:9,s:"OFF"},{h:13,s:"ON"},{h:17,s:"OFF"},{h:21,s:"ON"}]
+    "Nazimabad A Block": ["06:00 AM – 09:00 AM → ON","09:00 AM – 01:00 PM → OFF","01:00 PM – 05:00 PM → ON","05:00 PM – 09:00 PM → OFF","09:00 PM – 06:00 AM → ON"],
+    "Nazimabad B Block": ["07:00 AM – 11:00 AM → ON","11:00 AM – 03:00 PM → OFF","03:00 PM – 07:00 PM → ON","07:00 PM – 11:00 PM → OFF","11:00 PM – 07:00 AM → ON"],
+    "Lyari": ["08:00 AM – 02:00 PM → OFF","02:00 PM – 06:00 PM → ON","06:00 PM – 12:00 AM → OFF","12:00 AM – 08:00 AM → ON"],
+    "Clifton": ["No Load Shedding Today"],
+    "Defence DHA": ["No Load Shedding (Exempted)"],
+    "default": ["06:00 AM – 10:00 AM → ON","10:00 AM – 02:00 PM → OFF","02:00 PM – 06:00 PM → ON","06:00 PM – 10:00 PM → OFF","10:00 PM – 06:00 AM → ON"]
   },
   gas: {
-    "all": [{h:5,s:"LOW"},{h:9,s:"FULL"},{h:12,s:"LOW"},{h:24,s:"LOW"}]
+    "all": ["12:00 AM – 05:00 AM → FULL PRESSURE","05:00 AM – 09:00 AM → LOW PRESSURE","09:00 AM – 12:00 PM → FULL PRESSURE","12:00 PM – 12:00 AM → LOW PRESSURE"]
   },
   water: {
-    lahore: [{h:4,s:"ON"},{h:10,s:"OFF"},{h:14,s:"ON"},{h:18,s:"OFF"},{h:20,s:"ON"},{h:24,s:"OFF"}],
-    karachi: [{h:8,s:"ON"},{h:16,s:"LOW"},{h:24,s:"LOW"}],
-    default: [{h:6,s:"ON"},{h:12,s:"LOW"},{h:18,s:"ON"},{h:24,s:"LOW"}]
+    lahore: ["04:00 AM – 10:00 AM → ON","10:00 AM – 02:00 PM → OFF","02:00 PM – 06:00 PM → ON","06:00 PM – 08:00 PM → OFF","08:00 PM – 12:00 AM → ON","12:00 AM – 04:00 AM → OFF"],
+    karachi: ["08:00 AM – 04:00 PM → NORMAL SUPPLY","04:00 PM – 08:00 AM → LOW / No Supply (Shortage)"],
+    default: ["06:00 AM – 12:00 PM → ON","12:00 PM – 06:00 PM → LOW","06:00 PM – 06:00 AM → ON"]
   }
 };
 
-// Populate cities when utility selected
+// Populate cities
 document.getElementById("utility").addEventListener("change", function() {
-  const citySelect = document.getElementById  ("city");
+  const citySelect = document.getElementById("city");
   citySelect.innerHTML = '<option value="">Select City</option>';
   Object.keys(cities).forEach(key => {
     const name = key.charAt(0).toUpperCase() + key.slice(1);
@@ -116,53 +116,74 @@ document.getElementById("utility").addEventListener("change", function() {
 
 // Populate areas
 document.getElementById("city").addEventListener("change", function() {
-  const areas = cities[this.value] || [];
   const areaSelect = document.getElementById("area");
   areaSelect.innerHTML = '<option value="">Select Area</option>';
-  areas.forEach(a => areaSelect.innerHTML += `<option>${a}</option>`);
+  (cities[this.value] || []).forEach(a => {
+    areaSelect.innerHTML += `<option value="${a}">${a}</option>`;
+  });
 });
 
-function getCurrentStatus() {
+function updateStatusAndSchedule() {
   const now = new Date();
   const hours = now.getHours();
-  const mins = now.getMinutes();
-  document.getElementById("currentTime").textContent = `Updated: ${now.toLocaleTimeString('en-GB')}`;
-
   const utility = document.getElementById("utility").value;
   const area = document.getElementById("area").value;
   const city = document.getElementById("city").value;
 
-  let status = "ON";
-  let color = "on";
-  let message = "";
+  document.getElementById("currentTime").textContent = "Last updated: " + now.toLocaleTimeString('en-GB');
+
+  let currentMsg = "";
+  let colorClass = "on";
 
   if (utility === "electricity") {
-    const areaSchedule = schedules.electricity[area] || schedules.electricity.default;
-    status = "ON";
-    areaSchedule.forEach(slot => {
-      if (hours >= slot.h) status = slot.s;
+    const sched = fullSchedule.electricity[area] || fullSchedule.electricity.default;
+    let isOn = true;
+    sched.forEach(slot => {
+      const time = slot.split(" → ")[0];
+      const status = slot.split(" → ")[1];
+      const startH = parseInt(time.split(":")[0]);
+      if (!time.includes("–") && hours >= 0) isOn = status.includes("ON");
+      else if (time.includes("PM") && startH < 12) startH += 12;
+      if (hours >= startH) isOn = status === "ON";
     });
-    message = status === "ON" ? "Power is ON" : "Load Shedding Active";
-    color = status === "ON" ? "on" : "off";
+    currentMsg = isOn ? "Power is ON Right Now" : "Load Shedding Active";
+    colorClass = isOn ? "on" : "off";
   }
   else if (utility === "gas") {
-    status = (hours >= 0 && hours < 5) || (hours >= 9 && hours < 12) ? "FULL" : "LOW";
-    message = status === "FULL" ? "Gas Full Pressure" : "Low Pressure / Off";
-    color = status === "FULL" ? "on" : "low";
+    const isFull = (hours >= 0 && hours < 5) || (hours >= 9 && hours < 12);
+    currentMsg = isFull ? "Gas Full Pressure Now" : "Low Pressure / Off";
+    colorClass = isFull ? "on" : "low";
   }
   else if (utility === "water") {
-    const sch = city === "lahore" ? schedules.water.lahore : schedules.water.karachi;
-    status = "ON";
-    sch.forEach(slot => {
-      if (hours >= slot.h) status = slot.s;
+    const sched = city === "lahore" ? fullSchedule.water.lahore : fullSchedule.water.karachi;
+    let isOn = true;
+    sched.forEach(slot => {
+      const start = parseInt(slot.split(":")[0]);
+      if (hours >= start) isOn = slot.includes("ON");
     });
-    message = status === "ON" ? "Water Supply ON" : "Low Supply / Off";
-    color = status === "ON" ? "on" : "low";
+    currentMsg = isOn ? "Water Supply ON" : "Low / No Supply";
+    colorClass = isOn ? "on" : "low";
   }
 
-  const el = document.getElementById("currentStatus");
-  el.textContent = message;
-  el.className = "current-status " + color;
+  document.getElementById("currentStatus").textContent = currentMsg;
+  document.getElementById("currentStatus").className = "current-status " + colorClass;
+
+  // Show full schedule
+  const list = document.getElementById("scheduleList");
+  list.innerHTML = "";
+  let slots = [];
+  if (utility === "gas") slots = fullSchedule.gas.all;
+  else if (utility === "water") slots = city === "lahore" ? fullSchedule.water.lahore : fullSchedule.water.karachi;
+  else slots = fullSchedule.electricity[area] || fullSchedule.electricity.default;
+
+  slots.forEach(slot => {
+    const div = document.createElement("div");
+    div.className = "slot";
+    const status = slot.includes("ON") || slot.includes("FULL") ? "on" : slot.includes("LOW") ? "low" : "off";
+    div.innerHTML = `<span class="time">${slot.split(" → ")[0]}</span>
+                     <span class="status-tag ${status}">${slot.split(" → ")[1] || slot}</span>`;
+    list.appendChild(div);
+  });
 }
 
 document.getElementById("form").onsubmit = function(e) {
@@ -172,11 +193,11 @@ document.getElementById("form").onsubmit = function(e) {
   document.getElementById("location").textContent = 
     `${document.querySelector("#utility option:checked").text} – ${document.getElementById("area").value}, ${document.querySelector("#city option:checked").text}`;
 
-  getCurrentStatus();
-  setInterval(getCurrentStatus, 60000); // Update every minute
+  updateStatusAndSchedule();
+  setInterval(updateStatusAndSchedule, 60000);
 
   document.getElementById("result").style.display = "block";
-  window.scrollTo(0, document.getElementById("result").offsetTop - 100);
+  window.scrollTo({ top: document.getElementById("result").offsetTop - 100, behavior: 'smooth' });
 };
 </script>
 </body>
