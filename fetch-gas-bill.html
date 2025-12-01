@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fetch Gas Bill - Live</title>
+<style>body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#e67e22,#d35400);margin:0;padding:20px;min-height:100vh;color:#fff}
+.container{max-width:700px;margin:40px auto;background:#fff;color:#333;border-radius:20px;padding:40px;box-shadow:0 20px 50px rgba(0,0,0,0.4);text-align:center}
+h1{font-size:2.8rem;color:#e67e22;margin:0}
+/* Same styles as above */</style></head><body>
+<div class="container">
+  <h1>Gas Bill</h1>
+  <p>SNGPL • SSGC • Live Data</p>
+  <select id="type"><option value="sngpl">SNGPL (Punjab/KPK)</option><option value="ssgc">SSGC (Sindh/Balochistan)</option></select>
+  <input type="text" id="ref" placeholder="Enter Consumer Number" maxlength="20">
+  <button onclick="fetchLiveBill()">Fetch Live Bill</button>
+  <div class="result" id="result">/* Same result block as electric */</div>
+</div>
+<script>/* Same script as electric, only color change */</script>
+</body></html>
