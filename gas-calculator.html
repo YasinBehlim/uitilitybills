@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gas Bill Estimator Winter 2025 – SNGPL & SSGC</title>
+  <style>
+    body{font-family:'Segoe UI',sans-serif;margin:0;background:linear-gradient(135deg,#2ecc71,#27ae60);min-height:100vh;color:#fff;padding:20px}
+    .container{max-width:700px;margin:40px auto;background:#fff;color:#333;border-radius:20px;padding:40px;box-shadow:0 20px 50px rgba(0,0,0,0.3);text-align:center}
+    h1{color:#27ae60;font-size:2.5rem}
+    input,select,button{width:100%;padding:18px;margin:15px 0;border-radius:12px;font-size:1.2rem;border:none}
+    button{background:#e67e22;color:#fff;cursor:pointer;font-weight:bold}
+    .result{margin-top:30px;padding:30px;background:#f8f9fa;border-radius:16px;display:none}
+    .big{font-size:2.2rem;font-weight:bold;color:#27ae60}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Gas Bill Estimator – Winter 2025</h1>
+  <p>SNGPL & SSGC Official Winter Slabs</p>
+
+  <select id="company">
+    <option value="sngpl">SNGPL (Punjab, KPK, Islamabad)</option>
+    <option value="ssgc">SSGC (Sindh, Balochistan)</option>
+  </select>
+  <input type="number" id="mcf" placeholder="Enter MCF used this month (e.g. 6.5)" step="0.1">
+
+  <button onclick="calculateGas()">Calculate Gas Bill</button>
+
+  <div class="result" id="result">
+    <h2>Your Winter Gas Bill</h2>
+    <p><strong>MCF Used:</strong> <span id="used"></span></p>
+    <p><strong>Base Amount:</strong> Rs. <span id="base"></span></p>
+    <p><strong>+ GST 18%:</strong> Rs. <span id="gst"></span></p>
+    <p><strong>Total Payable:</strong> Rs. <strong id="total" class="big"></strong></p>
+    <p style="font-size:0.9em;color:#555">Winter rates: Nov–Feb (higher slabs)</p>
+
+    <button onclick="downloadPDF()" style="margin-top:20px;background:#9b59b6">Download PDF</button>
+  </div>
+
+  <p style="margin-top:30px"><a href="index.html" style="color:#27ae60">← Back to Home</a></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function calculateGas() {
+  const company = document.getElementById("company").value;
+  const mcf = parseFloat(document.getElementById("mcf").value) || 0;
+  if (mcf <= 0) return alert("Enter valid MCF");
+
+  let rate;
+  if (company === "sngpl") {
+    if (mcf <= 0.5) rate = 0;
+    else if (mcf <= 1) rate = 240;
+    else if (mcf <= 3) rate = 720 + (mcf - 1) * 600;
+    else
