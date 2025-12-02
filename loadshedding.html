@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Load-shedding Schedule 2025</title>
+  <style>
+    body{font-family:'Segoe UI',sans-serif;margin:0;background:linear-gradient(135deg,#ff6b6b,#ee5a52);min-height:100vh;color:#fff;padding:20px}
+    .container{max-width:900px;margin:40px auto;background:rgba(255,255,255,0.95);color:#333;border-radius:20px;padding:30px;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
+    h1{text-align:center;color:#ff6b46c1;margin:0}
+    input{width:100%;padding:18px;margin:20px 0;border-radius:12px;border:none;font-size:1.2rem}
+    table{width:100%;border-collapse:collapse;margin-top:20px}
+    th,td{padding:15px;text-align:center;border-bottom:1px solid #ddd}
+    th{background:#6b46c1;color:#fff}
+    .highlight{background:#ffeb3b;color:#000;font-weight:bold}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Live Load-shedding Schedule 2025</h1>
+  <p style="text-align:center">Search any area in Pakistan</p>
+  <input type="text" id="search" placeholder="Enter city or area name..." onkeyup="filter()">
+
+  <table id="schedule">
+    <thead><tr><th>City / Area</th><th>Today’s Load-shedding</th></tr></thead>
+    <tbody>
+      <tr><td>Lahore – Johar Town</td><td>6 PM – 10 PM</td></tr>
+      <tr><td>Karachi – Clifton</td><td>No Load-shedding</td></tr>
+      <tr><td>Islamabad – F-10</td><td>8 PM – 11 PM</td></tr>
+      <tr><td>Rawalpindi – Saddar</td><td>7 PM – 11 PM</td></tr>
+      <tr><td>Faisalabad – Madina Town</td><td>5 PM – 9 PM</td></tr>
+      <tr><td>Multan – Gulgasht</td><td>6 PM – 10 PM</td></tr>
+      <tr><td>Gujranwala – Model Town</td><td>7 PM – 10 PM</td></tr>
+      <tr><td>Peshawar – University Town</td><td>8 PM – 12 AM</td></tr>
+      <tr><td>Quetta – Satellite Town</td><td>9 PM – 1 AM</td></tr>
+      <tr><td>Sialkot – Cantt</td><td>6 PM – 9 PM</td></tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+
+  <p style="text-align:center;margin-top:30px">
+    <a href="index.html" style="color:#6b46c1;font-weight:bold">← Back to Home</a>
+  </p>
+</div>
+
+<script>
+function filter() {
+  let input = document.getElementById("search").value.toLowerCase();
+  let rows = document.querySelectorAll("#schedule tbody tr");
+  rows.forEach(row => {
+    let text = row.textContent.toLowerCase();
+    row.style.display = text.includes(input) ? "" : "none";
+  });
+}
+</script>
+</body>
+</html>
