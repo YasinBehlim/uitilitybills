@@ -1,107 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pakistan Utility Portal 2025</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pakistan Utility Helper 2025</title>
   <style>
-    body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);margin:0;padding:0;min-height:100vh;color:#fff}
-    .container{max-width:1200px;margin:0 auto;padding:20px}
-    header{text-align:center;padding:50px 20px}
-    h1{font-size:3.2rem;margin:0;background:linear-gradient(45deg,#ff6b6b,#4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .tagline{font-size:1.4rem;margin-top:12px;opacity:0.9}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:40px}
-    .card{background:#fff;color:#2c3e50;border-radius:22px;overflow:hidden;box-shadow:0 12px 35px rgba(0,0,0,0.4);transition:0.4s}
-    .card:hover{transform:translateY(-15px);box-shadow:0 25px 50px rgba(0,0,0,0.5)}
-    .card-img{height:170px;display:flex;align-items:center;justify-content:center}
-    .card-img img{height:100px}
-    .card-body{padding:28px;text-align:center}
-    .card h3{font-size:1.7rem;margin:0 0 15px;color:#2c3e50}
-    .card p{color:#555;line-height:1.6;margin-bottom:22px;font-size:1.05rem}
-    .btn{display:inline-block;background:#e74c3c;color:#fff;padding:16px 36px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:1.15rem;transition:0.3s}
-    .btn:hover{background:#c0392b;transform:scale(1.07)}
-    footer{padding:50px 20px;text-align:center;font-size:1rem;opacity:0.85}
-    @media(max-width:768px){
-      h1{font-size:2.5rem}
-      .cards{grid-template-columns:1fr}
-    }
+    body{font-family:'Segoe UI',sans-serif;margin:0;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;color:#333}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{background:rgba(255,255,255,0.95);border-radius:20px;padding:30px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);margin-bottom:30px}
+    h1{color:#667eea;font-size:2.8rem;margin:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px}
+    .card{background:#fff;border-radius:20px;padding:30px;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.2);transition:0.3s;min-height:220px;display:flex;flex-direction:column;justify-content:center}
+    .card:hover{transform:translateY(-10px);box-shadow:0 25px 50px rgba(0,0,0,0.3)}
+    .card h3{font-size:1.6rem;margin:15px 0;color:#333}
+    .card a{text-decoration:none;color:#667eea;font-weight:bold;font-size:1.3rem}
+    .footer{padding:30px;text-align:center;color:#fff;font-size:1.1rem}
+    .urdu{font-family:'Noto Nastaliq Urdu',serif}
+    @media(max-width:768px){.grid{grid-template-columns:1fr}}
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Pakistan Utility Portal</h1>
-      <p class="tagline">One place for all your electricity, gas & water needs — 100% Free & Accurate 2025</p>
-    </header>
+<div class="container">
+  <header>
+    <h1 id="title">Pakistan Utility Helper 2025</h1>
+    <p id="tagline">بجلی · گیس · سولر · لوڈشیڈنگ · بل کیلکولیٹر – سب کچھ ایک جگہ</p>
+  </header>
 
-    <div class="cards">
-
-      <!-- 1. Fetch Electricity Bill -->
-      <div class="card">
-        <div class="card-img" style="background:#e74c3c">
-          <img src="https://img.icons8.com/fluency/100/000000/invoice.png" alt="Electric Bill">
-        </div>
-        <div class="card-body">
-          <h3>Fetch Electricity Bill</h3>
-          <p>Enter 14-digit reference number → View & download your latest bill (All DISCOs + K-Electric)</p>
-          <a href="fetch-electric-bill.html" class="btn">Open Bill</a>
-        </div>
-      </div>
-
-      <!-- 2. Fetch Gas Bill -->
-      <div class="card">
-        <div class="card-img" style="background:#f39c12">
-          <img src="https://img.icons8.com/fluency/100/000000/gas.png" alt="Gas Bill">
-        </div>
-        <div class="card-body">
-          <h3>Fetch Gas Bill</h3>
-          <p>SNGPL or SSGC — Enter consumer number → See your current bill instantly</p>
-          <a href="fetch-gas-bill.html" class="btn">Open Gas Bill</a>
-        </div>
-      </div>
-
-      <!-- 3. Fetch Water Bill -->
-      <div class="card">
-        <div class="card-img" style="background:#3498db">
-          <img src="https://img.icons8.com/fluency/100/000000/water.png" alt="Water Bill">
-        </div>
-        <div class="card-body">
-          <h3>Fetch Water Bill</h3>
-          <p>WASA Lahore/Faisalabad, KWSB Karachi — View & pay your water bill</p>
-          <a href="fetch-water-bill.html" class="btn">Open Water Bill</a>
-        </div>
-      </div>
-
-      <!-- 4. Live Load Shedding -->
-      <div class="card">
-        <div class="card-img" style="background:#9b59b6">
-          <img src="https://img.icons8.com/fluency/100/000000000/lightning-bolt.png" alt="Load Shedding">
-        </div>
-        <div class="card-body">
-          <h3>Live Load Shedding Status</h3>
-          <p>Real-time electricity, gas & water status<br>42 cities • 1200+ areas</p>
-          <a href="load-shedding.html" class="btn">Check Now</a>
-        </div>
-      </div>
-
-      <!-- 5. Bill Calculator -->
-      <div class="card">
-        <div class="card-img" style="background:#27ae60">
-          <img src="https://img.icons8.com/fluency/100/000000/calculator.png" alt="Calculator">
-        </div>
-        <div class="card-body">
-          <h3>Bill Calculator</h3>
-          <p>Calculate exact electricity, gas & water bills<br>All companies • 2025 tariffs</p>
-          <a href="bill-calculator.html" class="btn">Calculate Now</a>
-        </div>
-      </div>
-
-    </div>
-
-    <footer>
-      Pakistan Utility Portal © 2025 • Free • Accurate • Made for Every Pakistani<br>
-      No ads • No login not required • Works offline too
-    </footer>
+  <div class="grid">
+    <div class="card"><h3>Live Load-shedding Schedule</h3><a href="loadshedding.html">42+ Cities →</a></div>
+    <div class="card"><h3>Electricity Bill Calculator 2025</h3><a href="electric-calculator.html">NEPRA Slabs + Taxes →</a></div>
+    <div class="card"><h3>Solar Savings Calculator</h3><a href="solar-calculator.html">Enter Units & See Saving →</a></div>
+    <div class="card"><h3>Gas Bill Estimator (Winter 2025)</h3><a href="gas-calculator.html">SNGPL & SSGC Rates →</a></div>
+    <div class="card"><h3>Bill Splitter</h3><a href="bill-splitter.html">Hostel / Family / Office →</a></div>
+    <div class="card"><h3>Net Metering Profit</h3><a href="net-metering.html">Sell Power & Earn Money →</a></div>
   </div>
+
+  <div class="footer">
+    Made with ❤️ for Pakistan • 100% Free • No Ads • No Fake Promises<br>
+    <button onclick="document.body.classList.toggle('urdu');this.textContent=document.body.classList.contains('urdu')?'English':'اردو'" style="margin-top:10px;padding:10px 20px;font-size:1rem">اردو</button>
+  </div>
+</div>
+
+<script>
+  document.body.classList.contains('urdu') ? document.getElementById('title').textContent = 'پاکستان یوٹیلٹی ہیلپر ۲۰۲۵' : 'Pakistan Utility Helper 2025';
+  document.body.classList.contains('urdu') ? document.getElementById('tagline').textContent = 'بجلی · گیس · سولر · لوڈشیڈنگ · بل کیلکولیٹر – سب کچھ ایک جگہ' : 'Electricity · Gas · Solar · Load-shedding · Bill Calculator – All in one place';
+</script>
 </body>
 </html>
